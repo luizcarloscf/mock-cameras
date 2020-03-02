@@ -1,0 +1,10 @@
+{
+    "broker_uri": "amqp://10.10.2.1:30000",
+    "folder": "./",
+    "videos": [
+        {
+            "person_id": 1,
+            "gesture_id": 1
+        }
+    ]
+}
