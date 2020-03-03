@@ -1,15 +1,15 @@
 import os
 import time
 import socket
+
 from gateway import CameraGateway
-from is_msgs.image_pb2 import Image
 from utils import load_options, to_pb_image
+from is_msgs.camera_pb2 import CameraConfig
 from google.protobuf.empty_pb2 import Empty
 from is_msgs.common_pb2 import FieldSelector
 from video_loader import MultipleVideoLoader
+from is_wire.core import Channel, Message, Logger
 from is_wire.rpc import ServiceProvider, LogInterceptor
-from is_msgs.camera_pb2 import CameraConfig, CameraConfigFields
-from is_wire.core import Channel, Message, Logger, Status, StatusCode
 
 
 def main():

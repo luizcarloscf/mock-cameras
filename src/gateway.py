@@ -1,5 +1,4 @@
 from google.protobuf.empty_pb2 import Empty
-from is_msgs.common_pb2 import FieldSelector
 from is_msgs.camera_pb2 import CameraConfig, CameraConfigFields
 
 
