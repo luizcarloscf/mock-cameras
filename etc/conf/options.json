@@ -6,5 +6,6 @@
             "person_id": 1,
             "gesture_id": 1
         }
-    ]
+    ],
+    "loop": true
 }

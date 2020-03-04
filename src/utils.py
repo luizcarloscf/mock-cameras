@@ -8,7 +8,7 @@ from is_msgs.image_pb2 import Image
 def load_options():
     """Loading options from a json file and return a DICTIONARY object.
     If no location file of options is passed, it searchs for 'options.json'"""
-    op_file = sys.argv[1] if len(sys.argv) > 1 else 'options.json'
+    op_file = sys.argv[1] if len(sys.argv) > 1 else 'etc/conf/options.json'
     with open(op_file, 'r') as f:
         op = json.load(f)
     return op
