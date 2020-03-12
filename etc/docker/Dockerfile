@@ -22,6 +22,7 @@ RUN wget https://bootstrap.pypa.io/get-pip.py && \
     rm -f get-pip.py
 
 # installing packages on requiments.txt with pip3
-ADD ./requirements.txt /requirements.txt
+WORKDIR /project
+ADD ./requirements.txt /project/requirements.txt
 RUN pip3 install -r requirements.txt
 RUN rm -f requirements.txt

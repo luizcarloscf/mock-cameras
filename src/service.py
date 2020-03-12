@@ -50,7 +50,7 @@ def main():
                 cam_id:
                 os.path.join(options['folder'],
                              'p{:03d}g{:02d}c{:02d}.mp4'.format(person_id, gesture_id, cam_id))
-                for cam_id in [0, 1, 2, 3]
+                for cam_id in options["cameras_id"]
             }
 
             # object that let get images from multiples videos files

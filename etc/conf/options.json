@@ -1,6 +1,12 @@
 {
     "broker_uri": "amqp://10.10.2.1:30000",
-    "folder": "./",
+    "folder": "/datasets",
+    "cameras_id": [
+        0,
+        1,
+        2,
+        3
+    ],
     "videos": [
         {
             "person_id": 1,
