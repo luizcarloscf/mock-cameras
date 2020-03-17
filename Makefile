@@ -38,3 +38,6 @@ login:
 
 lint: clean
 	@ $(FLAKE8) src
+
+install:
+	./bootstrap.sh
