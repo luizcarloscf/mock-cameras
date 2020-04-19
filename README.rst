@@ -40,7 +40,8 @@ Options
             "videos": [
                 {
                     "person_id": 1,
-                    "gesture_id": 1
+                    "gesture_id": 1,
+                    "iterations": 1
                 }
             ],
             "loop": true
