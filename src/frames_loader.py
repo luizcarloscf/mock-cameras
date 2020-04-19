@@ -24,9 +24,10 @@ class FramesLoader:
         self.num_samples = self.video_loader.n_frames()
         self.count_sample = 0
         self.fps = fps
-
-        self.log.info("Number of samples: {}".format(self.num_samples))
-
+        info = {
+            "total_samples": self.num_samples
+        }
+        self.log.info('{}', str(info).replace("'", '"'))
         self.run = True
         self.queue = queue.Queue()
         self.thread = threading.Thread(target=self._reader, daemon=True)

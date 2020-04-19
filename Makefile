@@ -36,7 +36,7 @@ push:
 login:
 	docker login
 
-lint: clean
+lint:
 	@ $(FLAKE8) src
 
 install:

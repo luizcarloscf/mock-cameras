@@ -17,7 +17,8 @@ data:
       "videos": [
           {
               "person_id": 1,
-              "gesture_id": 6
+              "gesture_id": 6,
+              "iterations": 1
           }
       ],
       "loop": true

@@ -53,41 +53,54 @@ def main():
                 for cam_id in options["cameras_id"]
             }
 
-            # object that let get images from multiples videos files
-            video_loader = FramesLoader(video_files)
+            for iteration in range(video['iterations']):
 
-            # iterate through all samples on video
-            while True:
+                info = {
+                    "person": person_id,
+                    "gesture": gesture_id,
+                    "iteration": iteration
+                }
+                log.info('{}', str(info).replace("'", '"'))
 
-                time_initial = time.time()
+                # object that let get images from multiples videos files
+                video_loader = FramesLoader(video_files)
 
-                # listen server for messages about change
-                try:
-                    message = rpc_channel.consume(timeout=0)
-                    if server.should_serve(message):
-                        server.serve(message)
-                except socket.timeout:
-                    pass
+                # iterate through all samples on video
+                while True:
 
-                frame_id, frames = video_loader.read()
+                    time_initial = time.time()
 
-                for cam in sorted(frames.keys()):
-                    pb_image = to_pb_image(frames[cam])
-                    msg = Message(content=pb_image)
-                    topic = 'CameraGateway.{}.Frame'.format(cam)
-                    publish_channel.publish(msg, topic=topic)
+                    # listen server for messages about change
+                    try:
+                        message = rpc_channel.consume(timeout=0)
+                        if server.should_serve(message):
+                            server.serve(message)
+                    except socket.timeout:
+                        pass
 
-                took_ms = (time.time() - time_initial) * 1000
+                    frame_id, frames = video_loader.read()
 
-                dt = (1 / camera.fps) - (took_ms / 1000)
-                if dt > 0:
-                    log.info("Sample: {}, took_ms: {}, wait_ms: {}".format(
-                        frame_id, took_ms, dt * 1000))
-                    time.sleep(dt)
+                    for cam in sorted(frames.keys()):
+                        pb_image = to_pb_image(frames[cam])
+                        msg = Message(content=pb_image)
+                        topic = 'CameraGateway.{}.Frame'.format(cam)
+                        publish_channel.publish(msg, topic=topic)
 
-                if frame_id >= (video_loader.num_samples - 1):
-                    video_loader.release()
-                    break
+                    took_ms = (time.time() - time_initial) * 1000
+
+                    dt = (1 / camera.fps) - (took_ms / 1000)
+                    if dt > 0:
+                        time.sleep(dt)
+                        info = {
+                            "sample": frame_id,
+                            "took_ms": took_ms,
+                            "wait_ms": dt * 1000
+                        }
+                        log.info('{}', str(info).replace("'", '"'))
+
+                    if frame_id >= (video_loader.num_samples - 1):
+                        video_loader.release()
+                        break
 
         if options['loop'] is False:
             break
