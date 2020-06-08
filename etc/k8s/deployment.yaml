@@ -38,9 +38,8 @@ spec:
     spec:
       containers:
         - name: "mock-cameras"
-          image: luizcarloscf/mock-cameras:0.0.1
-          command: ["python3"]
-          args: ["/opt/is/src/service.py", "/opt/options/options.json"]
+          image: luizcarloscf/mock-cameras:0.0.2
+          command: ["mock-cameras"]
           imagePullPolicy: Always
           resources:
             limits:

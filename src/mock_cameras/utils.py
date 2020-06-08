@@ -6,10 +6,13 @@ from is_msgs.image_pb2 import Image
 
 
 def load_options():
-    """Loading options from a json file and return a DICTIONARY object.
-    If no location file of options is passed, it searchs for 'etc/conf/options.json'
-    Returns:
-        op (dict): options loaded from a json file     
+    """Loading options from a json file and return a dict object.
+    If no location file of options is passed, it searchs for 'etc/conf/options.json'.
+    
+    Returns
+    -------
+    :class: `dict`
+        dict with options loaded from a json file.    
     """
     op_file = sys.argv[1] if len(sys.argv) > 1 else 'etc/conf/options.json'
     with open(op_file, 'r') as f:
@@ -17,12 +20,18 @@ def load_options():
     return op
 
 
-def to_np_image(input_image):
+def to_np_image(input_image: Image) -> np.ndarray:
     """Converts a ProtoBuf Object Image to numpy array. 
-    Args:
-        input_image (Image): Image Object Protobuf from is_msgs
-    Returns: 
-        output_image (Numpy Array): image in a numpy array 
+
+    Parameters
+    ----------
+    input_image: is_msgs.image_pb2.Image
+        Generate protocol message object from is_msgs that defines an image.
+    
+    Returns
+    -------
+    :class: `numpy.ndarray`
+            image as a numpy array 
     """
     if isinstance(input_image, np.ndarray):
         output_image = input_image
@@ -34,14 +43,24 @@ def to_np_image(input_image):
     return output_image
 
 
-def to_pb_image(input_image, encode_format='.jpeg', compression_level=0.8):
-    """Converts a numpy array image to ProtoBuf Object.
-    Args:
-        input_image (Numpy Array): image
-        encode_format (str): standard .jpeg
-        compression_level (float): standard 0.8
-    Returns:
-        Image (Image): Protobuf object from is_msgs.
+def to_pb_image(input_image: np.ndarray,
+                encode_format: str = '.jpeg', 
+                compression_level: float = 0.8) -> Image:
+    """Converts a numpy array image to ProtoBuf Message Object
+    
+    Parameters
+    ----------
+    input_image: numpy.ndarray
+        numpy image in format BGR.
+    encode_format: str 
+        Define the encoding format from one of the following formats: '.jpeg' or '.png'.
+    compression_level: float
+        image compression.
+    
+    Returns
+    -------
+    :class: `is_msgs.image_pb2.Image`
+        Protobuf object defining a image from is_msgs.
     """
     if isinstance(input_image, np.ndarray):
         if encode_format == '.jpeg':

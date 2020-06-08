@@ -1,6 +1,6 @@
 {
-    "broker_uri": "amqp://rabbitmq.defaults",
-    "folder": "/datasets",
+    "broker_uri": "amqp://guest:guest@localhost:5672",
+    "folder": "/home/luiz/Documents/",
     "cameras_id": [
         0,
         1,

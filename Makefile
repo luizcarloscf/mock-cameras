@@ -1,4 +1,4 @@
-VERSION := 0.0.1
+VERSION := 0.0.2
 USER := luizcarloscf
 IMAGE := mock-cameras
 PYTHON := python3
@@ -37,7 +37,7 @@ login:
 	docker login
 
 lint:
-	@ $(FLAKE8) src
+	@ $(FLAKE8) src/mock_cameras/
 
 install:
 	./bootstrap.sh

@@ -21,15 +21,13 @@ RUN wget https://bootstrap.pypa.io/get-pip.py && \
     python3 get-pip.py && \
     rm -f get-pip.py
 
-# installing packages on requiments.txt with pip3
-WORKDIR /opt/is
-
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
-RUN rm -f requirements.txt
-
 # copying project
+WORKDIR /opt/is
 COPY src/ src
 COPY etc/conf etc/conf
+COPY setup.py ./setup.py
+RUN pip3 install .
 
-ENTRYPOINT ["python3", "src/service.py"]
+
+
+ENTRYPOINT ["mock-cameras"]

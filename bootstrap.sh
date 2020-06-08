@@ -38,7 +38,6 @@ if [[ $EUID != 0 || -z ${wasnt_root} ]]; then
   pip3 uninstall --yes opencv-python
 
   #installing packages listed at requirements.txt
-  pip3 install -r requirements.txt
   pip3 install -r requirements-dev.txt
   
 fi

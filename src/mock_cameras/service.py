@@ -1,5 +1,6 @@
 import os
 import time
+import json
 import socket
 
 from gateway import CameraGateway
@@ -53,6 +54,8 @@ def main():
                 for cam_id in options["cameras_id"]
             }
 
+            groundtruth_file = os.path.join(options['folder'] , 'p{:03d}g{:02d}_spots.json'.format(person_id, gesture_id))
+
             for iteration in range(video['iterations']):
 
                 info = {
@@ -63,12 +66,20 @@ def main():
                 log.info('{}', str(info).replace("'", '"'))
 
                 # object that let get images from multiples videos files
-                video_loader = FramesLoader(video_files)
+                video_loader = FramesLoader(video_files, groundtruth_file, gesture_id)
 
                 # iterate through all samples on video
                 while True:
 
                     time_initial = time.time()
+
+                    frame_id, gesture_flag, frames = video_loader.read()
+
+                    for cam in sorted(frames.keys()):
+                        pb_image = to_pb_image(frames[cam])
+                        msg = Message(content=pb_image)
+                        topic = 'CameraGateway.{}.Frame'.format(cam)
+                        publish_channel.publish(msg, topic=topic)
 
                     # listen server for messages about change
                     try:
@@ -78,14 +89,6 @@ def main():
                     except socket.timeout:
                         pass
 
-                    frame_id, frames = video_loader.read()
-
-                    for cam in sorted(frames.keys()):
-                        pb_image = to_pb_image(frames[cam])
-                        msg = Message(content=pb_image)
-                        topic = 'CameraGateway.{}.Frame'.format(cam)
-                        publish_channel.publish(msg, topic=topic)
-
                     took_ms = (time.time() - time_initial) * 1000
 
                     dt = (1 / camera.fps) - (took_ms / 1000)
@@ -93,6 +96,7 @@ def main():
                         time.sleep(dt)
                         info = {
                             "sample": frame_id,
+                            "gesture": gesture_flag,
                             "took_ms": took_ms,
                             "wait_ms": dt * 1000
                         }
