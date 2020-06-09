@@ -1,3 +1,4 @@
 [flake8]
 max-line-length = 100
-ignore = W291
+ignore = W291, W293
+exclude = *_pb2.py

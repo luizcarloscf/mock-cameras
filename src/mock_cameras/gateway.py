@@ -3,6 +3,7 @@ from is_wire.rpc.context import Context
 from is_msgs.common_pb2 import FieldSelector
 from is_msgs.camera_pb2 import CameraConfig, CameraConfigFields
 
+
 class CameraGateway(object):
     def __init__(self, fps: float = 10.0):
         """Create a mock camera gateway. The functions self.get_config and self.set_config receive

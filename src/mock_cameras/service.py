@@ -1,6 +1,5 @@
 import os
 import time
-import json
 import socket
 
 from gateway import CameraGateway
@@ -55,7 +54,9 @@ def main():
                 for cam_id in options["cameras_id"]
             }
 
-            groundtruth_file = os.path.join(options['folder'] , 'p{:03d}g{:02d}_spots.json'.format(person_id, gesture_id))
+            groundtruth_file = os.path.join(options['folder'],
+                                            'p{:03d}g{:02d}_spots.json'.format(person_id, 
+                                                                               gesture_id))
 
             for iteration in range(video['iterations']):
 
