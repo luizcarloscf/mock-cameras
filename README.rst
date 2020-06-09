@@ -1,6 +1,21 @@
 ============
 Mock Cameras
 ============
+.. image:: https://img.shields.io/docker/pulls/luizcarloscf/mock-cameras
+    :target: https://hub.docker.com/r/luizcarloscf/mock-cameras
+    :alt: docker pulls
+
+.. image:: https://img.shields.io/docker/v/luizcarloscf/mock-cameras?sort=date
+    :target: https://hub.docker.com/r/luizcarloscf/mock-cameras
+    :alt: latest version
+
+.. image:: https://img.shields.io/docker/image-size/luizcarloscf/mock-cameras?sort=date
+    :target: https://hub.docker.com/r/luizcarloscf/mock-cameras
+    :alt: image size
+
+.. image:: https://img.shields.io/docker/stars/luizcarloscf/mock-cameras
+    :target: https://hub.docker.com/r/luizcarloscf/mock-cameras
+    :alt: docker stars
 
 Mock the cameras gateway, by publishing the images of a dataset on the *is* architecture.
 

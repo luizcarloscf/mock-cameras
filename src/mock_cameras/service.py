@@ -6,6 +6,7 @@ import socket
 from gateway import CameraGateway
 from utils import load_options, to_pb_image
 from frames_loader import FramesLoader
+from info_pb2 import GatewayInfo
 
 from is_msgs.camera_pb2 import CameraConfig
 from google.protobuf.empty_pb2 import Empty
@@ -80,6 +81,14 @@ def main():
                         msg = Message(content=pb_image)
                         topic = 'CameraGateway.{}.Frame'.format(cam)
                         publish_channel.publish(msg, topic=topic)
+
+                    info_pb = GatewayInfo()
+                    info_pb.created_at = float(time.time())
+                    info_pb.service_name = "mock_cameras"
+                    info_pb.frame_id = int(frame_id)
+                    info_pb.gesture_id = int(gesture_flag)
+                    msg = Message(content=info_pb)
+                    publish_channel.publish(msg, topic='InfoKeeper.MockCameras.Save')
 
                     # listen server for messages about change
                     try:

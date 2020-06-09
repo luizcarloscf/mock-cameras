@@ -41,3 +41,9 @@ lint:
 
 install:
 	./bootstrap.sh
+
+proto:
+	@ docker run --rm -v $(PWD):$(PWD) -w $(PWD) luizcarloscf/docker-protobuf:master \
+												--python_out=./src/mock_cameras \
+												-I./src/conf/ info.proto
+	@ echo "src/is-gesture/options_pb2.py file successfully written"
