@@ -1,6 +1,7 @@
 {
     "broker_uri": "amqp://guest:guest@localhost:5672",
     "folder": "/home/luiz/Documents/",
+    "fps": 9,
     "cameras_id": [
         0,
         1,

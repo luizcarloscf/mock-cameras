@@ -19,7 +19,7 @@ def main():
     service_name = "CameraGateway"
     log = Logger(service_name)
     options = load_options()
-    camera = CameraGateway()
+    camera = CameraGateway(options["fps"])
 
     publish_channel = Channel(options['broker_uri'])
     rpc_channel = Channel(options['broker_uri'])

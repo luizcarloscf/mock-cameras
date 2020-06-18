@@ -17,6 +17,8 @@ def load_options():
     op_file = sys.argv[1] if len(sys.argv) > 1 else 'etc/conf/options.json'
     with open(op_file, 'r') as f:
         op = json.load(f)
+    assert isinstance(op['fps'], int)
+    assert op['fps'] > 0 and op['fps'] <= 10
     return op
 
 
