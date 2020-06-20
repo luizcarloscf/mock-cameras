@@ -100,6 +100,7 @@ def main():
 
                     if frame_id >= (video_loader.num_samples - 1):
                         video_loader.release()
+                        del video_loader
                         break
 
         if options['loop'] is False:

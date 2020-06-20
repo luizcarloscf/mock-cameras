@@ -70,5 +70,8 @@ class FramesLoader:
         """Finish the thread
         """
         self.run = False
+        with self.queue.mutex:
+            self.queue.queue.clear()
         self.thread.join()
         self.video_loader.release_memory()
+        del self.video_loader
