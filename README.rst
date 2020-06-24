@@ -29,8 +29,10 @@ Options
     .. code:: json
 
         {
-            "broker_uri": "amqp://rabbitmq.defaults",
+            "broker_uri": "amqp://rabbitmq.default",
+            "zipkin_uri": "http://zipkin.default:9411",
             "folder": "/datasets",
+            "fps": 9,
             "cameras_id": [
                 0,
                 1,

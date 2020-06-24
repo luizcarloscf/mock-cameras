@@ -7,7 +7,9 @@ data:
   mock: |-
     {
       "broker_uri": "amqp://rabbitmq.default",
+      "zipkin_uri": "http://zipkin.default:9411",
       "folder": "/datasets",
+      "fps": 9,
       "cameras_id": [
           0,
           1,
@@ -17,7 +19,7 @@ data:
       "videos": [
           {
               "person_id": 1,
-              "gesture_id": 6,
+              "gesture_id": 1,
               "iterations": 1
           }
       ],
@@ -38,7 +40,7 @@ spec:
     spec:
       containers:
         - name: "mock-cameras"
-          image: luizcarloscf/mock-cameras:0.0.1
+          image: luizcarloscf/mock-cameras:0.0.3
           command: ["python3"]
           args: ["/opt/is/src/service.py", "/opt/options/options.json"]
           imagePullPolicy: Always
