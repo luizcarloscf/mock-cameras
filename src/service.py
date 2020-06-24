@@ -1,4 +1,6 @@
 import os
+import gc
+import re
 import time
 import socket
 
@@ -9,16 +11,28 @@ from frames_loader import FramesLoader
 from is_msgs.camera_pb2 import CameraConfig
 from google.protobuf.empty_pb2 import Empty
 from is_msgs.common_pb2 import FieldSelector
-from is_wire.core import Channel, Message, Logger
 from is_wire.rpc import ServiceProvider, LogInterceptor
+from opencensus.ext.zipkin.trace_exporter import ZipkinExporter
+from is_wire.core import Channel, Message, Logger, Tracer, AsyncTransport
 
+def create_exporter(service_name, uri):
+    log = Logger(name="CreateExporter")
+    zipkin_ok = re.match("http:\\/\\/([a-zA-Z0-9\\.]+)(:(\\d+))?", uri)
+    if not zipkin_ok:
+        log.critical("Invalid zipkin uri \"{}\", expected http://<hostname>:<port>", uri)
+    exporter = ZipkinExporter(
+        service_name=service_name,
+        host_name=zipkin_ok.group(1),
+        port=zipkin_ok.group(3),
+        transport=AsyncTransport)
+    return exporter
 
 def main():
 
     service_name = "CameraGateway"
     log = Logger(service_name)
     options = load_options()
-    camera = CameraGateway()
+    camera = CameraGateway(fps=options["fps"])
 
     publish_channel = Channel(options['broker_uri'])
     rpc_channel = Channel(options['broker_uri'])
@@ -35,6 +49,9 @@ def main():
                     request_type=CameraConfig,
                     reply_type=Empty,
                     function=camera.set_config)
+
+    exporter = create_exporter(service_name=service_name, uri=options["zipkin_uri"])
+    
 
     while True:
 
@@ -70,21 +87,27 @@ def main():
 
                     time_initial = time.time()
 
+                    
+
                     # listen server for messages about change
                     try:
                         message = rpc_channel.consume(timeout=0)
                         if server.should_serve(message):
                             server.serve(message)
                     except socket.timeout:
-                        pass
+                        pass                    
 
                     frame_id, frames = video_loader.read()
 
                     for cam in sorted(frames.keys()):
+                        tracer = Tracer(exporter)
+                        span = tracer.start_span(name='frame')
                         pb_image = to_pb_image(frames[cam])
                         msg = Message(content=pb_image)
+                        msg.inject_tracing(span) 
                         topic = 'CameraGateway.{}.Frame'.format(cam)
                         publish_channel.publish(msg, topic=topic)
+                        tracer.end_span()
 
                     took_ms = (time.time() - time_initial) * 1000
 
@@ -101,6 +124,7 @@ def main():
                     if frame_id >= (video_loader.num_samples - 1):
                         video_loader.release()
                         del video_loader
+                        gc.collect()
                         break
 
         if options['loop'] is False:

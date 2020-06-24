@@ -47,7 +47,7 @@ class MultipleVideoLoader:
         assert (type(filenames) == dict)
         assert (len(filenames) > 0)
         self._filenames = {kv[0]: os.path.join(folder, kv[1]) for kv in filenames.items()}
-        self._video_captures = {src: cv2.VideoCapture(f) for src, f in self._filenames.items()}
+        self._video_captures = {src: cv2.VideoCapture(f, apiPreference=cv2.CAP_FFMPEG) for src, f in self._filenames.items()}
         if not all([vc.isOpened() for vc in self._video_captures.values()]):
             raise Exception("Can't open one of given video files.")
         n_frames = [int(vc.get(cv2.CAP_PROP_FRAME_COUNT)) for vc in self._video_captures.values()]
@@ -87,3 +87,6 @@ class MultipleVideoLoader:
             return None
 
         return {src: video_frames[index] for src, video_frames in self._frames.items()}
+    def __del__(self):
+        for vc in self._video_captures.values():
+            vc.release()
