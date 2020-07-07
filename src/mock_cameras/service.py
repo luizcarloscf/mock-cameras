@@ -85,6 +85,7 @@ def main():
 
                     info_pb = GatewayInfo()
                     info_pb.created_at = float(time.time())
+                    info_pb.fps = float(camera.fps)
                     info_pb.service_name = "mock_cameras"
                     info_pb.frame_id = int(frame_id)
                     info_pb.gesture_id = int(gesture_flag)

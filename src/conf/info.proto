@@ -2,8 +2,9 @@ syntax = "proto3";
 
 message GatewayInfo {
     double created_at = 1;
-    string service_name = 2;
-    uint32 frame_id = 3;
-    uint32 gesture_id = 4;   
+    double fps = 2;
+    string service_name = 3;
+    uint32 frame_id = 4;
+    uint32 gesture_id = 5;   
 }
 
