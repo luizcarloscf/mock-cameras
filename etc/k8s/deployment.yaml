@@ -2,12 +2,13 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mock-cameras
-  namespace: default
+  namespace: orchestrator
 data:
   mock: |-
     {
-      "broker_uri": "amqp://rabbitmq.default",
+      "broker_uri": "amqp://rabbitmq.orchestrator",
       "folder": "/datasets",
+      "fps": 9,
       "cameras_id": [
           0,
           1,
@@ -25,12 +26,12 @@ data:
     }
 
 ---
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: "mock-cameras"
+  namespace: orchestrator
 spec:
-  replicas: 1
   template:
     metadata:
       labels:
@@ -39,7 +40,8 @@ spec:
       containers:
         - name: "mock-cameras"
           image: luizcarloscf/mock-cameras:0.0.2
-          command: ["mock-cameras"]
+          command: ["python3"]
+          args: ["/opt/is/src/mock_cameras/service.py", "/opt/options/options.json"]
           imagePullPolicy: Always
           resources:
             limits:
@@ -51,6 +53,7 @@ spec:
             - mountPath: /datasets
               name: datasets
               readOnly: true
+      restartPolicy: Never
       volumes:
         - name: options
           configMap:
