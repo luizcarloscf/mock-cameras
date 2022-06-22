@@ -1,4 +1,4 @@
-numpy==1.18.1
+numpy==1.22.0
 is-wire==1.2.0
 is-msgs==1.1.10
 opencensus-ext-zipkin==0.2.1
